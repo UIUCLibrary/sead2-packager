@@ -1,0 +1,103 @@
+{
+	"@context": "https://w3id.org/ore/context",
+	
+	  "dc": "http://purl.org/dc/elements/1.1/",
+	  "dcterms": "http://purl.org/dc/terms/",
+	  "ore": "http://www.openarchives.org/ore/terms/",
+	  "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+	  "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+	  "xsd": "http://www.w3.org/2001/XMLSchema#",
+	 
+	 "@type": "ResourceMap",
+	 "@id": "https://sead-test.ncsa.illinois.edu/acr/resteasy/researchobjects/tag:sead-data.net,2015:RO_rmu1jp-OW9h8KG9OLEtmMQ",
+     "dc.date.created": "Aug 24, 2015 10:55:39 AM",
+     "dc.creator": [
+         "http://cet.ncsa.uiuc.edu/2007/person/anonymous",
+         "SEAD Version 1.5, https://sead-test.ncsa.illinois.edu/acr"
+     ],
+     "dc.rights": "This Resource Map is available under the Creative Commons Attribution-Noncommercial Generic license.",
+     "describes": {
+         "@id": "https://sead-test.ncsa.illinois.edu/acr/resteasy/researchobjects/tag:sead-data.net,2015:RO_rmu1jp-OW9h8KG9OLEtmMQ#aggregation",
+         "@type": [
+             "Aggregation",
+             "http://cet.ncsa.uiuc.edu/2007/Collection"
+         ],
+		 "dc.description.abstract": "The unused shoe - when my daughter had a cast in the summer of 2015",
+         "dc.date.created": "2015-08-09T17:27:06.910Z",
+         "dc.creator": "orcid.org/0000-0001-8462-650X",
+         "dc.relation.haspart": [
+             "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/C2619D8C-EE97-4AD5-A5F4-BAC21F06C79B/v1",
+             "tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w/v1"
+         ],
+         "dc.identifier": "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/616EA007-BFC6-4596-9FE3-5D9E30319CB3/v1",
+         "dc.relation.isversionof": "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/616EA007-BFC6-4596-9FE3-5D9E30319CB3",
+         "dc.itle": "2.0PubDemo1",
+         "dc.coverage.spatial": "albany, ny",
+         "aggregates": [
+             {
+                 "@type": [
+                     "AggregatedResource",
+                     "http://cet.ncsa.uiuc.edu/2007/Collection"
+                 ],
+                 "dc.date.created": "2015-08-09T17:27:31.329Z",
+                 "dc.relation.haspart": [
+                     "tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ/v1",
+                     "tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg/v1"
+                 ],
+                 "dc.identifier": "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/C2619D8C-EE97-4AD5-A5F4-BAC21F06C79B/v1",
+                 "dc.title": "PubDemoSubcollection1",
+                 "dc.relation.isversionof": "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/C2619D8C-EE97-4AD5-A5F4-BAC21F06C79B"
+             },
+             {
+                "@type": [
+                    "AggregatedResource",
+                    "http://cet.ncsa.uiuc.edu/2007/Dataset"
+                ],	
+                "dc.description.abstract": "Large balloons but low traffic lights. Each one had to maneuver below the lights...",
+                "dc.date.created": "2015-08-09T18:00:52.528Z",
+                "dc.coverage": {
+                    "Identifier": "tag:cet.ncsa.uiuc.edu,2008:/bean/GeoPoint/e07df74d-5e2f-403e-85b9-90ef3095a15b",
+                    "lat": "42.450085",
+                    "long": "-73.245384"
+                },
+                "dc.dentifier": "tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ/v1",
+                "dc.title": "20150704_103127.jpg",
+                "dc.relation.isversionof": "tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ"
+            },
+             {
+                 "@type": [
+                     "AggregatedResource",
+                     "http://cet.ncsa.uiuc.edu/2007/Dataset"
+                 ],
+                 "dc.date.created": "2015-08-13T16:40:53.374Z",
+                 "dc.coverage.spatial": {
+                     "Identifier": "tag:cet.ncsa.uiuc.edu,2008:/bean/GeoPoint/4593e307-cf1c-462b-85bf-9e25241cc435",
+                     "lat": "40.104603",
+                     "long": "-88.22572"
+                 },
+                 "dc.identifier": "tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg/v1",
+                 "Mimetype": "image/jpeg",
+                 "Size": "1267871",
+                 "dc.title": "morrowPlot-withGPSLocation.jpg",
+                 "dc.relation.isversionof": "tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg",
+                 "dc.subject": [
+                     "tag:cet.ncsa.uiuc.edu,2008:/tag#morrow",
+                     "tag:cet.ncsa.uiuc.edu,2008:/tag#illinois"
+                 ]
+             },
+             {
+                 "@type": [
+                     "AggregatedResource",
+                     "http://cet.ncsa.uiuc.edu/2007/Dataset"
+                 ],
+                 "dc.date.created": "2015-08-09T18:01:07.361Z",
+                 "dc.identifier": "tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w/v1",
+                 "Mimetype": "image/jpeg",
+                 "Size": "2556329",
+                 "dc.title": "20150717_132154.jpg",
+                 "dc.relation.isversionof": "tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w"
+             }
+         ],
+         "dc.subject": "tag:cet.ncsa.uiuc.edu,2008:/tag#footwear"
+     }
+ }

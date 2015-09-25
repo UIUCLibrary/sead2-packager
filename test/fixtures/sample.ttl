@@ -1,0 +1,79 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://sead-test.ncsa.illinois.edu/acr/resteasy/researchobjects/tag:sead-data.net,2015:RO_rmu1jp-OW9h8KG9OLEtmMQ> a <http://www.openarchives.org/ore/terms/ResourceMap>;
+   <http://cet.ncsa.uiuc.edu/2007/mmdb/describes> <https://sead-test.ncsa.illinois.edu/acr/resteasy/researchobjects/tag:sead-data.net,2015:RO_rmu1jp-OW9h8KG9OLEtmMQ#aggregation>;
+   dcterms:created "Aug 24, 2015 10:55:39 AM";
+   dcterms:creator "http://cet.ncsa.uiuc.edu/2007/person/anonymous",
+     "SEAD Version 1.5, https://sead-test.ncsa.illinois.edu/acr";
+   dcterms:rights "This Resource Map is available under the Creative Commons Attribution-Noncommercial Generic license." .
+
+<https://sead-test.ncsa.illinois.edu/acr/resteasy/researchobjects/tag:sead-data.net,2015:RO_rmu1jp-OW9h8KG9OLEtmMQ#aggregation> a <http://www.openarchives.org/ore/terms/Aggregation>,
+     <http://cet.ncsa.uiuc.edu/2007/Collection>;
+   rdfs:label "2.0PubDemo1";
+   <http://cet.ncsa.uiuc.edu/2007/annotation/hasAnnotation> [ dc:identifier "tag:cet.ncsa.uiuc.edu,2008:/bean/Annotation/2150164A-B8ED-4D74-AD35-2B5603EEF783"];
+   dc:creator "http://cet.ncsa.uiuc.edu/2007/person/myersjd@umich.edu";
+   dc:identifier "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/616EA007-BFC6-4596-9FE3-5D9E30319CB3/v1";
+   dc:title "2.0PubDemo1";
+   dcterms:abstract "The unused shoe - when my daughter had a cast in the summer of 2015";
+   dcterms:created "2015-08-09T17:27:06.910Z";
+   dcterms:creator "orcid.org/0000-0001-8462-650X";
+   dcterms:hasPart "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/C2619D8C-EE97-4AD5-A5F4-BAC21F06C79B/v1",
+     "tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w/v1";
+   dcterms:isVersionOf "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/616EA007-BFC6-4596-9FE3-5D9E30319CB3";
+   <http://sead-data.net/terms/ProposedForPublication> "true";
+   <http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag> "tag:cet.ncsa.uiuc.edu,2008:/tag#footwear";
+   <http://www.openarchives.org/ore/terms/aggregates> [
+     a <http://www.openarchives.org/ore/terms/AggregatedResource>,
+       <http://cet.ncsa.uiuc.edu/2007/Collection>;
+     rdfs:label "PubDemoSubcollection1";
+     dc:creator "http://cet.ncsa.uiuc.edu/2007/person/myersjd@umich.edu";
+     dc:identifier "tag:cet.ncsa.uiuc.edu,2008:/bean/Collection/C2619D8C-EE97-4AD5-A5F4-BAC21F06C79B/v1";
+     dc:title "PubDemoSubcollection1";
+     dcterms:created "2015-08-09T17:27:31.329Z";
+     dcterms:hasPart "tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ/v1",
+       "tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg/v1"
+   ],  [
+     a <http://www.openarchives.org/ore/terms/AggregatedResource>,
+       <http://cet.ncsa.uiuc.edu/2007/Dataset>;
+     rdfs:label "20150704_103127.jpg";
+     dc:creator "http://cet.ncsa.uiuc.edu/2007/person/myersjd@umich.edu";
+     dc:date "2015-08-09T18:00:52.528Z";
+     dc:format "image/jpeg";
+     dc:identifier "tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ/v1";
+     dc:title "20150704_103127.jpg";
+     dcterms:abstract "Large balloons but low traffic lights. Each one had to maneuver below the lights...";
+     <http://www.openarchives.org/ore/terms/similarTo> <https://sead-test.ncsa.illinois.edu/acr/resteasy/datasets/tag:sead-data.net,2015:data_przbcj9w5Vbg-lnIPPiBgQ/file>;
+     <tag:tupeloproject.org,2006:/2.0/files/length> "3614615";
+     <tag:tupeloproject.org,2006:/2.0/gis/hasGeoPoint> [ dc:identifier "tag:cet.ncsa.uiuc.edu,2008:/bean/GeoPoint/e07df74d-5e2f-403e-85b9-90ef3095a15b"]
+   ],  [
+     a <http://www.openarchives.org/ore/terms/AggregatedResource>,
+       <http://cet.ncsa.uiuc.edu/2007/Dataset>;
+     rdfs:label "morrowPlot-withGPSLocation.jpg";
+     dc:creator "http://cet.ncsa.uiuc.edu/2007/person/myersjd@umich.edu";
+     dc:date "2015-08-13T16:40:53.374Z";
+     dc:format "image/jpeg";
+     dc:identifier "tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg/v1";
+     dc:title "morrowPlot-withGPSLocation.jpg";
+     <http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag> "tag:cet.ncsa.uiuc.edu,2008:/tag#morrow",
+       "tag:cet.ncsa.uiuc.edu,2008:/tag#illinois";
+     <http://www.openarchives.org/ore/terms/similarTo> <https://sead-test.ncsa.illinois.edu/acr/resteasy/datasets/tag:sead-data.net,2015:data_HPFBa5_UL6ZIp2xsUfTdbg/file>;
+     <tag:tupeloproject.org,2006:/2.0/files/length> "1267871";
+     <tag:tupeloproject.org,2006:/2.0/gis/hasGeoPoint> [ dc:identifier "tag:cet.ncsa.uiuc.edu,2008:/bean/GeoPoint/4593e307-cf1c-462b-85bf-9e25241cc435"]
+   ],  [
+     a <http://www.openarchives.org/ore/terms/AggregatedResource>,
+       <http://cet.ncsa.uiuc.edu/2007/Dataset>;
+     rdfs:label "20150717_132154.jpg";
+     dc:creator "http://cet.ncsa.uiuc.edu/2007/person/myersjd@umich.edu";
+     dc:date "2015-08-09T18:01:07.361Z";
+     dc:format "image/jpeg";
+     dc:identifier "tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w/v1";
+     dc:title "20150717_132154.jpg";
+     <http://www.openarchives.org/ore/terms/similarTo> <https://sead-test.ncsa.illinois.edu/acr/resteasy/datasets/tag:sead-data.net,2015:data_G4dg9jjZAzxcgmzSnZmv1w/file>;
+     <tag:tupeloproject.org,2006:/2.0/files/length> "2556329"
+   ];
+   <http://www.openarchives.org/ore/terms/similarTo> <https://sead-test.ncsa.illinois.edu/acr/resteasy/collections/tag%3Acet.ncsa.uiuc.edu%2C2008%3A%2Fbean%2FCollection%2F616EA007-BFC6-4596-9FE3-5D9E30319CB3>;
+   <http:/sead-data.net/vocab/demo/where> "albany, ny" .

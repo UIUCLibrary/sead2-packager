@@ -1,0 +1,46 @@
+{
+	"@context": "http://re3data.org/",
+	"@type": "repository",
+	"orgidentifier": "ideals",
+	"repositoryName": "IDEALS",
+	"repositoryURL": "https://www.ideals.illinois.edu/",
+	"institution": "University of Illinois",
+	"description":{
+		"langauge": "eng",
+		"content":"IDEALS is the digital repository for research and scholarship - including published and unpublished papers, datasets, video and audio - produced at the University of Illinois."
+	},
+	"repositoryContact":"ideals-gen@illinois.edu",
+	"repositoryType": "institutional",
+	"subject": "any",
+	"keyword":"multidisciplinary",
+	"versioning": "no",
+	"databaseAccessType":"restricted",
+	"dataAccessType": [
+		"open",
+		"restricted"
+	],
+	"dataLicense": {
+		"dataLicenseName":"IDEALS Copyright and Intellectual Property Policy",
+		"dataLicenseURL":"http://hdl.handle.net/2142/235"
+	},
+	"contentType": [
+		"csv",
+		"txt",
+		"xml",
+		"html",
+		"tif",
+		"jp2",
+		"aif",
+		"fla",
+		"ogg",
+		"wav",
+		"avi",
+		"mj2"
+	],
+	"providerType":"serviceProvider",
+	"size":"640GB",
+	"maxFileSize": {
+		"unit": "MB",
+		"value": 2000
+	}
+}
