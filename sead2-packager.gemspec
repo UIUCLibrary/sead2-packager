@@ -27,5 +27,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rdoc')
   spec.add_development_dependency('aruba')
   spec.add_development_dependency('rake')
-  spec.add_dependency('methadone', '~> 1.9.0')
+  # spec.add_dependency('methadone', '~> 1.9.0')
+
+  spec.add_dependency('http-cookie')
+  spec.add_dependency('json')
+  spec.add_dependency('rest-client')
 end
