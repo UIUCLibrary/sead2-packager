@@ -5,18 +5,20 @@ require 'json'
 require 'rest-client'
 require 'cgi'
 require 'open-uri'
+require 'active_support/all'
 
+@host = 'https://seadtest.ideals.illinois.edu'
 
 def login
-  host = 'http://localhost:8080'
+
   user = 'njkhan505@gmail.com'
   pwd = '123456'
   begin
-    response = RestClient.post("#{host}/rest/login", {"email" => "#{user}", "password" => "#{pwd}"}.to_json,
+    response = RestClient.post("#{@host}/rest/login", {"email" => "#{user}", "password" => "#{pwd}"}.to_json,
                                {:content_type => 'application/json',
                                 :accept => 'application/json'})
-    login_token = response.to_str
-    puts "Your login token is: #{login_token}"
+    @login_token = response.to_str
+    puts "Your login token is: #{@login_token}"
 
   rescue => e
     puts "ERROR: #{e}"
@@ -24,6 +26,7 @@ def login
 end
 
 login
+
 
 researchobjects = RestClient.get 'http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects'
 researchobjects_parsed = JSON.parse(researchobjects)
@@ -88,52 +91,95 @@ researchobjects_parsed.each do |researchobject|
       next
     end
 
+
     ore = JSON.parse(ore_json)
-    # p ore
 
-    # ars = Array.new
-    # ars << ore
-    # p ars.count
-
-      File.open("/Users/njkhan2/Desktop/test.jsonjd", "wb") do |f|
-        f.write(ore.to_json)
-      end
-
-
-    title = ore["describes"]["Title"]
+    @title = ore["describes"]["Title"]
     abstract = ore["describes"]["Abstract"]
     rights = ore["Rights"]
     creator = ore["describes"]["Creator"]
     date = ore["describes"]["Creation Date"]
-    getFile = ore["describes"]["aggregates"][0]["similarTo"]
-    p "Abstract:  + #{abstract}\n Title: + #{title} \n Creator: + #{creator} \n Right: + #{rights} \n date: + #{date} \n URL for binary file: + #{getFile}"
+    getBitstream = ore["describes"]["aggregates"][0]["similarTo"]
+    p "Abstract:  + #{abstract}\n Title: + #{@title} \n Creator: + #{creator} \n Right: + #{rights} \n date: + #{date} \n URL for binary file: + #{getBitstream}"
 
 
 
-    cookie_url = 'sead-test.ncsa.illinois.edu'
+    graph = RDF::Graph.load(ore_url , format: :jsonld)
 
-    jar = HTTP::CookieJar.new
-    jar.load('sead.cookie')
-
-    p jar.cookies
-
-    cookie = HTTP::Cookie.cookie_value(jar.cookies(cookie_url))
-    p cookie
-
-    begin
-      response = RestClient.get(getFile, {:cookies => cookie})
-
-      p response.code
-
-    rescue => e
-      p "ERROR: Cannot get file at #{getFile} (#{e})"
-      next
+    @orefile = "/Users/njkhan2/Desktop/sead-test/#{@title}.xml"
+    File.open(@orefile, "wb") do |f|
+      f.write(graph.dump :rdfxml, standard_prefixes: true)
     end
+
+
+    def createItem
+
+      # Create an item
+      puts 'Creating an item.'
+      begin
+        item = RestClient.post("#{@host}/rest/collections/116/items",{"type" => "item"}.to_json,
+                               {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+        puts item.to_str
+        puts "Response status: #{item.code}"
+        getitemid = JSON.parse(item)
+        itemid = "#{getitemid["id"]}"
+        itemhandle = "#{getitemid["handle"]}"
+        puts "Item ID is: #{itemid}"
+        p "Handle is: #{itemhandle}"
+
+      # post orefile
+        postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{@title}",
+                                    {
+                                        :transfer =>{
+                                            :type => 'bitstream'
+                                        },
+                                        :upload => {
+                                            :file => File.new("#{@orefile}",'rb')
+                                        }
+                                    } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+        response_code = "#{postore.code}"
+        puts "Response status: #{response_code}"
+
+        if "#{response_code}" != "200"
+          p "ORE ingestion failed"
+        else
+          itemhandle = "#{getitemid["handle"]}"
+          p "Handle is: #{itemhandle}"
+        end
+
+      end
+    end
+
+    # createItem
+
+
+
+
+    # cookie_url = 'sead-test.ncsa.illinois.edu'
+    #
+    # jar = HTTP::CookieJar.new
+    # jar.load('sead.cookie')
+    #
+    # p jar.cookies
+    #
+    # cookie = HTTP::Cookie.cookie_value(jar.cookies(cookie_url))
+    # p cookie
+    #
+    # begin
+    #   response = RestClient.get(getFile, {:cookies => cookie})
+    #
+    #   p response.code
+    #
+    # rescue => e
+    #   p "ERROR: Cannot get file at #{getBitstream} (#{e})"
+    #   next
+    # end
 
 
 
   end
 
 end
+
 
 test_json = '[{"key":"dcterms.modified", "value":"2014-03-24T11:32:03-0400", "language":"en"},{"key":"dcterms.identifier", "value":"http://sead-test/fakeUri/0489a707-d428-4db4-8ce0-1ace548bc653", "language":"en"},{"key":"dcterms.title", "value":"Vortex2 Visualization", "language":"en"},{"key":"dcterms.abstract", "value":"The Vortex2 project (http://www.vortex2.org/home/) supported 100 scientists using over 40 science support vehicles participated in a nomadic effort to understand tornados. For the six weeks from May 1st to June 15th, 2010, scientists went roaming from state-to-state following severe weather conditions. With the help of meteorologists in the field who initiated boundary conditions, LEAD II (https://portal.leadproject.org/gridsphere/gridsphere) delivered six forecasts per day, starting at 7am CDT, creating up to 600 weather images per day. This information was used by the VORTEX2 field team and the command and control center at the University of Oklahoma to determine when and where tornadoes are most likely to occur and to help the storm chasers get to the right place at the right time. VORTEX2 used an unprecedented fleet of cutting edge instruments to literally surround tornadoes and the supercell thunderstorms that form them. An armada of mobile radars, including the Doppler On Wheels (DOW) from the Center for Severe Weather Research (CSWR), SMART-Radars from the University of Oklahoma, the NOXP radar from the National Severe Storms Laboratory (NSSL), radars from the University of Massachusetts, the Office of Naval Research and Texas Tech University (TTU), 12 mobile mesonet instrumented vehicles from NSSL and CSWR, 38 deployable instruments including Sticknets (TTU), Tornado-Pods (CSWR), 4 disdrometers (University of Colorado (CU)), weather balloon launching vans (NSSL, NCAR and SUNY-Oswego), unmanned aircraft (CU), damage survey teams (CSWR, Lyndon State College, NCAR), and photogrammetry teams (Lyndon State Univesity, CSWR and NCAR), and other instruments.", "language":"en"},{"key":"dcterms.publisher", "value":"http://d2i.indiana.edu/", "language":"en"},{"key":"dcterms.rights", "value":"All the data and visualizations are available for download and re-use. Proper attribution to the authors is required.", "language":"en"},{"key":"dcterms.creator", "value":"Quan Zhou", "language":"en"}]'
