@@ -14,10 +14,11 @@ require 'linkeddata'
 # Login to DSpace
 def login
 
-  user = 'njkhan505@gmail.com'
+  dspaceuser = 'njkhan505@gmail.com'
+
   pwd = '123456'
   begin
-    response = RestClient.post("#{@host}/rest/login", {"email" => "#{user}", "password" => "#{pwd}"}.to_json,
+    response = RestClient.post("#{@host}/rest/login", {"email" => "#{dspaceuser}", "password" => "#{pwd}"}.to_json,
                                {:content_type => 'application/json',
                                 :accept => 'application/json'})
     @login_token = response.to_str
@@ -29,6 +30,28 @@ def login
 end
 
 login
+
+
+# Log in to SEAD
+def login_sead
+  @host_sead = "https://sead-test.ncsa.illinois.edu/acr/#login/"
+  seaduser = 'njkhan2@illinois.edu'
+  pwd = '123456'
+
+  begin
+    response = RestClient.post("#{@host_sead}", {"email" => "#{seaduser}", "password" => "#{pwd}"}.to_json,
+                               {:content_type => 'application/json',
+                                :accept => 'application/json'})
+
+    puts response.code
+
+  rescue => e
+    puts "ERROR: #{e}"
+  end
+end
+
+login_sead
+
 
 
 # Get the list of all research objects for ideals
@@ -90,7 +113,7 @@ researchobjects_parsed.each do |researchobject|
       end
 
     rescue => e
-      # p "ERROR: Cannot reach #{ore_url} (#{e})"
+      p "ERROR: Cannot reach #{ore_url} (#{e})"
       next
     end
 
@@ -103,13 +126,22 @@ researchobjects_parsed.each do |researchobject|
     @rights = ore["Rights"]
     @creator = ore["describes"]["Creator"]
     @date = ore["describes"]["Creation Date"]
-    getBitstream = ore["describes"]["aggregates"][0]["similarTo"]
+
     p "Abstract: #{@abstract}"
     p "Title: #{@title}"
     p "Creator: #{@creator}"
     p "Right: #{@rights}"
     p "date: #{@date}"
-    p "URL for binary file: + #{getBitstream}"
+
+
+    # Retrieve aggreagated resources metadata
+    getBitstream = ore["describes"]["aggregates"]
+    # p getBitstream.class
+
+    files = getBitstream.map{|h| h["similarTo"]}
+    arTitles = getBitstream.map{|h| h["Title"]}
+    p files
+    p arTitles
 
 
     # Converts json-ld to xml
@@ -151,7 +183,7 @@ researchobjects_parsed.each do |researchobject|
 
 
       # post orefile
-        postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{@title}.jsonld&description=ORE_file",
+        postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{@title.gsub(' ', '_')}.jsonld&description=ORE_file",
                                     {
                                         :transfer =>{
                                             :type => 'bitstream'
@@ -170,6 +202,10 @@ researchobjects_parsed.each do |researchobject|
           p "Handle is: #{@itemhandle}"
         end
 
+
+      # Get and post ar bitstreams
+        firstBitstream = ore["describes"]["aggregates"][0]["similarTo"]
+        getFile = RestClient.get firstBitstream
 
       # update bitstream metadata
       #   getoreid = JSON.parse(postore)
@@ -224,6 +260,3 @@ researchobjects_parsed.each do |researchobject|
   end
 
 end
-
-
-test_json = '[{"key":"dcterms.modified", "value":"2014-03-24T11:32:03-0400", "language":"en"},{"key":"dcterms.identifier", "value":"http://sead-test/fakeUri/0489a707-d428-4db4-8ce0-1ace548bc653", "language":"en"},{"key":"dcterms.title", "value":"Vortex2 Visualization", "language":"en"},{"key":"dcterms.abstract", "value":"The Vortex2 project (http://www.vortex2.org/home/) supported 100 scientists using over 40 science support vehicles participated in a nomadic effort to understand tornados. For the six weeks from May 1st to June 15th, 2010, scientists went roaming from state-to-state following severe weather conditions. With the help of meteorologists in the field who initiated boundary conditions, LEAD II (https://portal.leadproject.org/gridsphere/gridsphere) delivered six forecasts per day, starting at 7am CDT, creating up to 600 weather images per day. This information was used by the VORTEX2 field team and the command and control center at the University of Oklahoma to determine when and where tornadoes are most likely to occur and to help the storm chasers get to the right place at the right time. VORTEX2 used an unprecedented fleet of cutting edge instruments to literally surround tornadoes and the supercell thunderstorms that form them. An armada of mobile radars, including the Doppler On Wheels (DOW) from the Center for Severe Weather Research (CSWR), SMART-Radars from the University of Oklahoma, the NOXP radar from the National Severe Storms Laboratory (NSSL), radars from the University of Massachusetts, the Office of Naval Research and Texas Tech University (TTU), 12 mobile mesonet instrumented vehicles from NSSL and CSWR, 38 deployable instruments including Sticknets (TTU), Tornado-Pods (CSWR), 4 disdrometers (University of Colorado (CU)), weather balloon launching vans (NSSL, NCAR and SUNY-Oswego), unmanned aircraft (CU), damage survey teams (CSWR, Lyndon State College, NCAR), and photogrammetry teams (Lyndon State Univesity, CSWR and NCAR), and other instruments.", "language":"en"},{"key":"dcterms.publisher", "value":"http://d2i.indiana.edu/", "language":"en"},{"key":"dcterms.rights", "value":"All the data and visualizations are available for download and re-use. Proper attribution to the authors is required.", "language":"en"},{"key":"dcterms.creator", "value":"Quan Zhou", "language":"en"}]'
