@@ -8,6 +8,13 @@ require 'open-uri'
 require 'active_support/all'
 require 'rdf'
 require 'linkeddata'
+require 'logger'
+
+@logger = Logger.new(STDOUT)
+@logger.level = Logger::INFO
+@logger.formatter = proc do |severity, datetime, progname, msg|
+  "#{severity}: #{msg}\n"
+end
 
 @host = 'https://seadtest.ideals.illinois.edu'
 
@@ -15,17 +22,17 @@ require 'linkeddata'
 def login_dspace
 
   dspaceuser = 'njkhan505@gmail.com'
-
   pwd = '123456'
+
   begin
     response = RestClient.post("#{@host}/rest/login", {"email" => "#{dspaceuser}", "password" => "#{pwd}"}.to_json,
                                {:content_type => 'application/json',
                                 :accept => 'application/json'})
     @login_token = response.to_str
-    puts "Your login token is: #{@login_token}"
+    @logger.info "Your login token is: #{@login_token}"
 
   rescue => e
-    puts "ERROR: #{e}"
+    @logger.fatal("Cannot log into DSpace (#{e})")
   end
 end
 
@@ -42,10 +49,10 @@ def login_sead
                                {:content_type => 'application/json',
                                 :accept => 'application/json'})
 
-    puts response.code
+    @logger.info(response.code)
 
   rescue => e
-    puts "ERROR: #{e}"
+    @logger.fatal("Cannot log into SEAD (#{e})")
   end
 end
 
@@ -54,56 +61,53 @@ end
 def create_item (title, abstract, creator, rights, date, orefile)
 
   # Create an item
-  puts 'Creating an item.'
-  begin
-    item = RestClient.post("#{@host}/rest/collections/116/items",{"type" => "item"}.to_json,
-                           {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-    puts item.to_str
-    puts "Response status: #{item.code}"
-    getitemid = JSON.parse(item)
-    itemid = "#{getitemid["id"]}"
-    itemhandle = "#{getitemid["handle"]}"
-    puts "Item ID is: #{itemid}"
+  @logger.info("Creating an item")
+  response = RestClient.post("#{@host}/rest/collections/116/items",{"type" => "item"}.to_json,
+                         {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
 
 
-    # update item metadata
-    metadata = [{"key"=>"dc.date", "value"=>"#{date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{creator}", "language"=>"en"}]
-
-    aggmetadata = RestClient.put("#{@host}/rest/items/#{itemid}/metadata", "#{metadata.to_json}",
-                                 {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-
-    p "Response status: #{aggmetadata.code}"
+  @logger.info("Response status: #{response.code}")
+  item = JSON.parse(response)
+  itemid = "#{item["id"]}"
+  itemhandle = "#{item["handle"]}"
+  @logger.info("Item ID is: #{itemid}")
 
 
-    # post orefile
-    postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}.jsonld&description=ORE_file",
-                              {
-                                  :transfer =>{
-                                      :type => 'bitstream'
-                                  },
-                                  :upload => {
-                                      :file => File.new("#{orefile}",'rb'),
-                                      :mimeType => 'application/ld+json'
-                                  }
-                              } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-    response_code = "#{postore.code}"
-    p postore
-    puts "Response status: #{response_code}"
+  # update item metadata
+  metadata = [{"key"=>"dc.date", "value"=>"#{date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{creator}", "language"=>"en"}]
 
-    if "#{response_code}" != "200"
-      p "ORE ingestion failed"
-    else
-      p "Handle is: #{itemhandle}"
-    end
+  aggmetadata = RestClient.put("#{@host}/rest/items/#{itemid}/metadata", "#{metadata.to_json}",
+                               {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
 
-    return itemid, itemhandle
+  @logger.info("Response status: #{aggmetadata.code}")
 
+
+  # post orefile
+  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}.jsonld&description=ORE_file",
+                            {
+                                :transfer =>{
+                                    :type => 'bitstream'
+                                },
+                                :upload => {
+                                    :file => File.new("#{orefile}",'rb')
+                                }
+                            } ,
+                            {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+
+  @logger.info "Response status: #{response.code}"
+
+  unless "#{response.code}" == "200"
+    @logger.fatal "ORE ingestion failed! (#{response})"
+    return -1, -1
   end
+
+  @logger.info "Handle is: #{itemhandle}"
+  return itemid, itemhandle
 end
 
 def update_item(itemid, bitstream, title, mime, date)
   # code here
-  postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}",
+  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}",
                             {
                                 :transfer =>{
                                     :type => 'bitstream'
@@ -112,9 +116,10 @@ def update_item(itemid, bitstream, title, mime, date)
                                     :file => File.new("#{bitstream}",'rb')
                                 }
                             } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-  response_code = "#{postore.code}"
-  p postore
-  puts "Response status: #{response_code}"
+
+  unless "#{response.code}" == "200"
+    @logger.fatal "ORE ingestion failed! (#{response})"
+  end
 end
 
 def update_status(stage, message, updatestatus_url)
@@ -130,7 +135,6 @@ end
 
 login_dspace
 login_sead
-
 
 # Get the list of all research objects for ideals
 researchobjects = RestClient.get 'http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects'
@@ -149,7 +153,7 @@ researchobjects_parsed.each do |researchobject|
 
 
   if old_item then
-    p "WARNING: Skipping #{agg_id}. Current status: stage = #{researchobject['Status'].last['stage']}, reporter = #{researchobject['Status'].last['reporter']}"
+    @logger.warn("Skipping #{agg_id}. Current status: stage = #{researchobject['Status'].last['stage']}, reporter = #{researchobject['Status'].last['reporter']}")
     next
   else
 
@@ -169,6 +173,7 @@ researchobjects_parsed.each do |researchobject|
 
     if ro_json.code != 200
       p "ERROR: Invalid URL #{ro_url} -- #{ro_json.code}"
+      next
     end
 
     ro = JSON.parse(ro_json)
@@ -182,10 +187,17 @@ researchobjects_parsed.each do |researchobject|
 
       if ro_json.code != 200
         p "ERROR: Invalid URL #{ore_url} -- #{ore_url.code}"
+        message = "Invalid URL #{ore_url} -- #{ore_url.code}"
+        stage = "Failure"
+        update_status(stage, message, updatestatus_url)
+        next
       end
 
     rescue => e
       p "ERROR: Cannot reach #{ore_url} (#{e})"
+      message = "Cannot reach #{ore_url} (#{e})"
+      stage = "Failure"
+      update_status(stage, message, updatestatus_url)
       next
     end
 
@@ -205,12 +217,19 @@ researchobjects_parsed.each do |researchobject|
     p "Right: #{rights}"
     p "date: #{date}"
 
-    orefile = "/Users/njkhan2/Desktop/sead-test/#{title}.jsonld"
-    File.open(orefile, "wb") do |f|
-      f.write(ore_json)
+    begin
+      orefile = "/Users/njkhan2/Desktop/sead-test/#{title}.jsonld"
+      File.open(orefile, "wb") do |f|
+        f.write(ore_json)
+      end
+    rescue => e
+      p "ERROR: Cannot download file to temp location -- (#{e})"
+      message = "Cannot download file to temp location -- (#{e})"
+      stage = "Failure"
+      update_status(stage, message, updatestatus_url)
     end
 
-    itemid, itemhandle = create_item title, abstract, creator, rights, date, orefile
+    itemid, itemhandle = create_item(title, abstract, creator, rights, date, orefile)
 
     # Retrieve aggreagated resources metadata
     aggregated_resources = ore["describes"]["aggregates"]
