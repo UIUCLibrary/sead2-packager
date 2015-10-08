@@ -12,7 +12,7 @@ require 'linkeddata'
 @host = 'https://seadtest.ideals.illinois.edu'
 
 # Login to DSpace
-def login
+def login_dspace
 
   dspaceuser = 'njkhan505@gmail.com'
 
@@ -29,7 +29,6 @@ def login
   end
 end
 
-login
 
 
 # Log in to SEAD
@@ -50,13 +49,93 @@ def login_sead
   end
 end
 
-login_sead
 
+# Creates item and posts ORE for the item
+def create_item (title, abstract, creator, rights, date, orefile)
+
+  # Create an item
+  puts 'Creating an item.'
+  begin
+    item = RestClient.post("#{@host}/rest/collections/116/items",{"type" => "item"}.to_json,
+                           {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+    puts item.to_str
+    puts "Response status: #{item.code}"
+    getitemid = JSON.parse(item)
+    itemid = "#{getitemid["id"]}"
+    itemhandle = "#{getitemid["handle"]}"
+    puts "Item ID is: #{itemid}"
+
+
+    # update item metadata
+    metadata = [{"key"=>"dc.date", "value"=>"#{date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{creator}", "language"=>"en"}]
+
+    aggmetadata = RestClient.put("#{@host}/rest/items/#{itemid}/metadata", "#{metadata.to_json}",
+                                 {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+
+    p "Response status: #{aggmetadata.code}"
+
+
+    # post orefile
+    postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}.jsonld&description=ORE_file",
+                              {
+                                  :transfer =>{
+                                      :type => 'bitstream'
+                                  },
+                                  :upload => {
+                                      :file => File.new("#{orefile}",'rb'),
+                                      :mimeType => 'application/ld+json'
+                                  }
+                              } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+    response_code = "#{postore.code}"
+    p postore
+    puts "Response status: #{response_code}"
+
+    if "#{response_code}" != "200"
+      p "ORE ingestion failed"
+    else
+      p "Handle is: #{itemhandle}"
+    end
+
+    return itemid, itemhandle
+
+  end
+end
+
+def update_item(itemid, bitstream, title, mime, date)
+  # code here
+  postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}",
+                            {
+                                :transfer =>{
+                                    :type => 'bitstream'
+                                },
+                                :upload => {
+                                    :file => File.new("#{bitstream}",'rb')
+                                }
+                            } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+  response_code = "#{postore.code}"
+  p postore
+  puts "Response status: #{response_code}"
+end
+
+def update_status(stage, message, updatestatus_url)
+  begin
+    RestClient.post("#{updatestatus_url}", {"reporter" => "ideals", "stage" => stage, "message" => message}.to_json, {:content_type => :json, :accept => :json})
+  rescue => e
+    p "ERROR: Cannot update status at #{updatestatus_url} (#{e})"
+  end
+end
+
+
+# Main
+
+login_dspace
+login_sead
 
 
 # Get the list of all research objects for ideals
 researchobjects = RestClient.get 'http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects'
 researchobjects_parsed = JSON.parse(researchobjects)
+
 # p researchobjects_parsed
 
 researchobjects_parsed.each do |researchobject|
@@ -81,16 +160,9 @@ researchobjects_parsed.each do |researchobject|
     # p 'Retreive Research Object from this link: '+ ro_url
 
     updatestatus_url = "http://seadva-test.d2i.indiana.edu/sead-c3pr/api/researchobjects/#{agg_id_escaped}/status"
-
-    begin
-      postStatus = RestClient.post("#{updatestatus_url}", {"reporter" => "ideals", "stage" => "Pending", "message" => "Processing research object"}.to_json, {:content_type => :json, :accept => :json})
-
-
-    rescue => e
-      p "WARNING: Cannot update status at #{updatestatus_url} (#{e})"
-      # next
-    end
-
+    message = "Processing research object"
+    stage = "Pending"
+    update_status(stage, message, updatestatus_url)
 
     ro_json = RestClient.get ro_url
     # p ro_json
@@ -120,140 +192,58 @@ researchobjects_parsed.each do |researchobject|
 
     ore = JSON.parse(ore_json)
 
-    # Retrieve the metadata
-    @title = ore["describes"]["Title"]
-    @abstract = ore["describes"]["Abstract"]
-    @rights = ore["Rights"]
-    @creator = ore["describes"]["Creator"]
-    @date = ore["describes"]["Creation Date"]
+    # Retrieve the metadata for the item
+    title = ore["describes"]["Title"]
+    abstract = ore["describes"]["Abstract"]
+    rights = ore["Rights"]
+    creator = ore["describes"]["Creator"]
+    date = ore["describes"]["Creation Date"]
 
-    p "Abstract: #{@abstract}"
-    p "Title: #{@title}"
-    p "Creator: #{@creator}"
-    p "Right: #{@rights}"
-    p "date: #{@date}"
+    p "Abstract: #{abstract}"
+    p "Title: #{title}"
+    p "Creator: #{creator}"
+    p "Right: #{rights}"
+    p "date: #{date}"
 
+    orefile = "/Users/njkhan2/Desktop/sead-test/#{title}.jsonld"
+    File.open(orefile, "wb") do |f|
+      f.write(ore_json)
+    end
+
+    itemid, itemhandle = create_item title, abstract, creator, rights, date, orefile
 
     # Retrieve aggreagated resources metadata
-    getBitstream = ore["describes"]["aggregates"]
-    # p getBitstream.class
+    aggregated_resources = ore["describes"]["aggregates"]
+    # p aggregated_resources.class
 
-    files = getBitstream.map{|h| h["similarTo"]}
-    arTitles = getBitstream.map{|h| h["Title"]}
-    p files
-    p arTitles
-
-
-    # Converts json-ld to xml
-    # graph = RDF::Graph.load(ore_url , format: :jsonld)
-    # @orefile = "/Users/njkhan2/Desktop/sead-test/#{@title}.xml"
-    # File.open(@orefile, "wb") do |f|
-    #   f.write(graph.dump :rdfxml, standard_prefixes: true)
-    # end
-
-    @orefile = "/Users/njkhan2/Desktop/sead-test/#{@title}.jsonld"
-    File.open(@orefile, "wb") do |f|
-      f.write(ore_url)
-    end
+    aggregated_resources.each do |ar|
+      file_url = ar['similarTo']
+      title = ar['Title']
+      mime = ar['Mimetype']
+      date = ar['Date']
 
 
-    # Creates item and posts ORE for the item
-    def createItem
-
-      # Create an item
-      puts 'Creating an item.'
-      begin
-        item = RestClient.post("#{@host}/rest/collections/116/items",{"type" => "item"}.to_json,
-                               {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-        puts item.to_str
-        puts "Response status: #{item.code}"
-        getitemid = JSON.parse(item)
-        itemid = "#{getitemid["id"]}"
-        @itemhandle = "#{getitemid["handle"]}"
-        puts "Item ID is: #{itemid}"
-
-
-      # update item metadata
-        metadata = [{"key"=>"dc.date", "value"=>"#{@date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{@title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{@abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{@creator}", "language"=>"en"}]
-
-        aggmetadata = RestClient.put("#{@host}/rest/items/#{itemid}/metadata", "#{metadata.to_json}",
-                                  {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-
-        p "Response status: #{aggmetadata.code}"
-
-
-      # post orefile
-        postore = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{@title.gsub(' ', '_')}.jsonld&description=ORE_file",
-                                    {
-                                        :transfer =>{
-                                            :type => 'bitstream'
-                                        },
-                                        :upload => {
-                                            :file => File.new("#{@orefile}",'rb')
-                                        }
-                                    } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-        response_code = "#{postore.code}"
-        p postore
-        puts "Response status: #{response_code}"
-
-        if "#{response_code}" != "200"
-          p "ORE ingestion failed"
-        else
-          p "Handle is: #{@itemhandle}"
+      bitstream = "/Users/njkhan2/Desktop/sead-test/#{title}"
+      File.open(bitstream, "wb") do |saved_file|
+        # the following "open" is provided by open-uri
+        open(file_url, "rb", :http_basic_authentication=>['njkhan2@illinois.edu', '123456']) do |read_file|
+          saved_file.write(read_file.read)
         end
-
-
-      # Get and post ar bitstreams
-        firstBitstream = ore["describes"]["aggregates"][0]["similarTo"]
-        getFile = RestClient.get firstBitstream
-
-      # update bitstream metadata
-      #   getoreid = JSON.parse(postore)
-      #   oreid = "#{getoreid["id"]}"
-      #   p "Bitstream id is: #{oreid}"
-      #
-      #   # ore_metadata = [{"key"=>"format", "value"=>"JSON-LD", "language"=>"en"},{"key"=>"mimeType", "value"=>"application/ld+json", "language"=>"en"}]
-      #   ore_metadata = [{"mimeType"=>"application/ld+json"}]
-      #   updatemetadata = RestClient.put("#{@host}/rest/bitstreams/#{oreid}", "#{ore_metadata.to_json}",
-      #                                {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-      #   p updatemetadata
-      #   p "Response status: #{updatemetadata.code}"
-
       end
-    end
 
-    createItem
+      File.open(orefile, "wb") do |f|
+        f.write(ore_json)
+      end
+
+      update_item itemid, bitstream, title, mime, date
+
+    end
 
 
     # Return Handle ID to SEAD
-    begin
-      returnHandle = RestClient.post("#{updatestatus_url}", {"reporter" => "ideals", "stage" => "Success", "message" => "https://seadtest.ideals.illinois.edu/handle/#{@itemhandle}"}.to_json, {:content_type => :json, :accept => :json})
-
-
-    rescue => e
-      p "WARNING: Cannot update status at #{updatestatus_url} (#{e})"
-      # next
-    end
-
-    # cookie_url = 'sead-test.ncsa.illinois.edu'
-    #
-    # jar = HTTP::CookieJar.new
-    # jar.load('sead.cookie')
-    #
-    # p jar.cookies
-    #
-    # cookie = HTTP::Cookie.cookie_value(jar.cookies(cookie_url))
-    # p cookie
-    #
-    # begin
-    #   response = RestClient.get(getFile, {:cookies => cookie})
-    #
-    #   p response.code
-    #
-    # rescue => e
-    #   p "ERROR: Cannot get file at #{getBitstream} (#{e})"
-    #   next
-    # end
+    message = "https://seadtest.ideals.illinois.edu/handle/#{itemhandle}"
+    stage = "Success"
+    update_status(stage, message, updatestatus_url)
 
 
 
