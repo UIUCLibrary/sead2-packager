@@ -1,0 +1,15 @@
+urls:
+  ro_list: https://sead-test.ncsa.illinois.edu/seadcp0.91/cp/repositories/Ideals/researchobjects
+  ro_ore: https://sead-test.ncsa.illinois.edu/seadcp0.91/cp/researchobjects/
+
+seaddata:
+  host: https://sead-test.ncsa.illinois.edu/acr/#login/
+  email: njkhan2@illinois.edu
+  password: 123456
+  ro_list: http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects
+  ro_ore: http://seadva-test.d2i.indiana.edu/sead-c3pr/api/researchobjects/
+
+dspacedata:
+  host: https://seadtest.ideals.illinois.edu
+  email: njkhan505@gmail.com
+  password: 123456

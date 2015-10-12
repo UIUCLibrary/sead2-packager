@@ -9,6 +9,9 @@ require 'active_support/all'
 require 'rdf'
 require 'linkeddata'
 require 'logger'
+require 'yaml'
+
+@config = YAML.load_file('data.yaml')
 
 @logger = Logger.new(STDOUT)
 @logger.level = Logger::INFO
@@ -16,13 +19,13 @@ require 'logger'
   "#{severity}: #{msg}\n"
 end
 
-@host = 'https://seadtest.ideals.illinois.edu'
+@host = @config['dspacedata']['host']
 
 # Login to DSpace
 def login_dspace
 
-  dspaceuser = 'njkhan505@gmail.com'
-  pwd = '123456'
+  dspaceuser = @config['dspacedata']['email']
+  pwd = @config['dspacedata']['password']
 
   begin
     response = RestClient.post("#{@host}/rest/login", {"email" => "#{dspaceuser}", "password" => "#{pwd}"}.to_json,
@@ -40,9 +43,9 @@ end
 
 # Log in to SEAD
 def login_sead
-  @host_sead = "https://sead-test.ncsa.illinois.edu/acr/#login/"
-  seaduser = 'njkhan2@illinois.edu'
-  pwd = '123456'
+  @host_sead = @config['seaddata']['host']
+  seaduser = @config['seaddata']['email']
+  pwd = @config['seaddata']['password']
 
   begin
     response = RestClient.post("#{@host_sead}", {"email" => "#{seaduser}", "password" => "#{pwd}"}.to_json,
@@ -137,7 +140,7 @@ login_dspace
 login_sead
 
 # Get the list of all research objects for ideals
-researchobjects = RestClient.get 'http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects'
+researchobjects = RestClient.get @config['seaddata']['ro_list']
 researchobjects_parsed = JSON.parse(researchobjects)
 
 # p researchobjects_parsed
@@ -159,11 +162,11 @@ researchobjects_parsed.each do |researchobject|
 
     agg_id_escaped = CGI.escape(agg_id)
     # p agg_id_escaped
-    ro_url = 'http://seadva-test.d2i.indiana.edu/sead-c3pr/api/researchobjects/'+ agg_id_escaped
+    ro_url = @config['seaddata']['ro_ore'] + agg_id_escaped
 
     # p 'Retreive Research Object from this link: '+ ro_url
 
-    updatestatus_url = "http://seadva-test.d2i.indiana.edu/sead-c3pr/api/researchobjects/#{agg_id_escaped}/status"
+    updatestatus_url = @config['seaddata']['ro_ore'] + "#{agg_id_escaped}/status"
     message = "Processing research object"
     stage = "Pending"
     update_status(stage, message, updatestatus_url)
@@ -260,7 +263,7 @@ researchobjects_parsed.each do |researchobject|
 
 
     # Return Handle ID to SEAD
-    message = "https://seadtest.ideals.illinois.edu/handle/#{itemhandle}"
+    message = @config['dspacedata']['host'] + "handle/#{itemhandle}"
     stage = "Success"
     update_status(stage, message, updatestatus_url)
 
