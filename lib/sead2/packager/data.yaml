@@ -1,7 +1,3 @@
-urls:
-  ro_list: https://sead-test.ncsa.illinois.edu/seadcp0.91/cp/repositories/Ideals/researchobjects
-  ro_ore: https://sead-test.ncsa.illinois.edu/seadcp0.91/cp/researchobjects/
-
 seaddata:
   host: https://sead-test.ncsa.illinois.edu/acr/#login/
   email: njkhan2@illinois.edu

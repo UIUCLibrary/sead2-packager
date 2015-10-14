@@ -97,6 +97,16 @@ def create_item (title, abstract, creator, rights, date, orefile)
                             } ,
                             {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
 
+  # Update bitstream metadata
+  # ore_metadata = JSON.parse(response)
+  # ore_id = "#{ore_metadata["id"]}"
+  # p ore_id
+  #
+  # update_aggmetadata = RestClient.put("#{@host}/rest/bitstreams/#{ore_id}", [{"format" => "JSON-LD"}, {"mimeType"=>"application/ld+json"}].to_json,
+  #                                     {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+  # p update_aggmetadata.to_str
+  # @logger.info "Response status: #{update_aggmetadata.code}"
+
   @logger.info "Response status: #{response.code}"
 
   unless "#{response.code}" == "200"
@@ -248,7 +258,7 @@ researchobjects_parsed.each do |researchobject|
       bitstream = "/Users/njkhan2/Desktop/sead-test/#{title}"
       File.open(bitstream, "wb") do |saved_file|
         # the following "open" is provided by open-uri
-        open(file_url, "rb", :http_basic_authentication=>['njkhan2@illinois.edu', '123456']) do |read_file|
+        open(file_url, "rb", :http_basic_authentication=>[@config['seaddata']['email'], @config['seaddata']['password']]) do |read_file|
           saved_file.write(read_file.read)
         end
       end
