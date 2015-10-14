@@ -32,7 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency('http-cookie')
   spec.add_dependency('json')
   spec.add_dependency('rest-client')
-  spec.add_dependency('activesupport')
   spec.add_dependency('rdf')
   spec.add_dependency('linkeddata')
 end

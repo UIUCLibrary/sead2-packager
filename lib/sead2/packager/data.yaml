@@ -4,6 +4,7 @@ seaddata:
   password: 123456
   ro_list: http://seadva-test.d2i.indiana.edu/sead-c3pr/api/repositories/ideals/researchobjects
   ro_ore: http://seadva-test.d2i.indiana.edu/sead-c3pr/api/researchobjects/
+  directory: /Users/njkhan2/Desktop/sead-test/
 
 dspacedata:
   host: https://seadtest.ideals.illinois.edu

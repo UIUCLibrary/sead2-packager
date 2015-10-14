@@ -5,11 +5,11 @@ require 'json'
 require 'rest-client'
 require 'cgi'
 require 'open-uri'
-require 'active_support/all'
 require 'rdf'
 require 'linkeddata'
 require 'logger'
 require 'yaml'
+require 'fileutils'
 
 @config = YAML.load_file('data.yaml')
 
@@ -61,7 +61,7 @@ end
 
 
 # Creates item and posts ORE for the item
-def create_item (title, abstract, creator, rights, date, orefile)
+def create_item (id, title, abstract, creator, rights, date, orefile)
 
   # Create an item
   @logger.info("Creating an item")
@@ -77,7 +77,7 @@ def create_item (title, abstract, creator, rights, date, orefile)
 
 
   # update item metadata
-  metadata = [{"key"=>"dc.date", "value"=>"#{date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{creator}", "language"=>"en"}]
+  metadata = [{"key"=>"dc.identifier", "value"=>"#{id}", "language"=>"en"},{"key"=>"dc.date", "value"=>"#{date}", "language"=>"en"},{"key"=>"dc.title", "value"=>"#{title}", "language"=>"en"},{"key"=>"dc.description.abstract", "value"=>"#{abstract}", "language"=>"en"},{"key"=>"dc.creator", "value"=>"#{creator}", "language"=>"en"}, {"key"=>"dc.rights", "value"=>"#{rights}", "language"=>"en"}]
 
   aggmetadata = RestClient.put("#{@host}/rest/items/#{itemid}/metadata", "#{metadata.to_json}",
                                {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
@@ -179,7 +179,7 @@ researchobjects_parsed.each do |researchobject|
     updatestatus_url = @config['seaddata']['ro_ore'] + "#{agg_id_escaped}/status"
     message = "Processing research object"
     stage = "Pending"
-    update_status(stage, message, updatestatus_url)
+    # update_status(stage, message, updatestatus_url)
 
     ro_json = RestClient.get ro_url
     # p ro_json
@@ -202,7 +202,7 @@ researchobjects_parsed.each do |researchobject|
         p "ERROR: Invalid URL #{ore_url} -- #{ore_url.code}"
         message = "Invalid URL #{ore_url} -- #{ore_url.code}"
         stage = "Failure"
-        update_status(stage, message, updatestatus_url)
+        # update_status(stage, message, updatestatus_url)
         next
       end
 
@@ -210,7 +210,7 @@ researchobjects_parsed.each do |researchobject|
       p "ERROR: Cannot reach #{ore_url} (#{e})"
       message = "Cannot reach #{ore_url} (#{e})"
       stage = "Failure"
-      update_status(stage, message, updatestatus_url)
+      # update_status(stage, message, updatestatus_url)
       next
     end
 
@@ -218,6 +218,7 @@ researchobjects_parsed.each do |researchobject|
     ore = JSON.parse(ore_json)
 
     # Retrieve the metadata for the item
+    id = ore["describes"]["@id"]
     title = ore["describes"]["Title"]
     abstract = ore["describes"]["Abstract"]
     rights = ore["Rights"]
@@ -231,7 +232,9 @@ researchobjects_parsed.each do |researchobject|
     p "date: #{date}"
 
     begin
-      orefile = "/Users/njkhan2/Desktop/sead-test/#{title}.jsonld"
+      new_directory = "#{title}"
+      Dir.mkdir(@config['seaddata']['directory']+new_directory) unless File.exist?(@config['seaddata']['directory']+new_directory)
+      orefile = @config['seaddata']['directory'] + "#{new_directory}/#{title}.jsonld"
       File.open(orefile, "wb") do |f|
         f.write(ore_json)
       end
@@ -239,10 +242,10 @@ researchobjects_parsed.each do |researchobject|
       p "ERROR: Cannot download file to temp location -- (#{e})"
       message = "Cannot download file to temp location -- (#{e})"
       stage = "Failure"
-      update_status(stage, message, updatestatus_url)
+      # update_status(stage, message, updatestatus_url)
     end
 
-    itemid, itemhandle = create_item(title, abstract, creator, rights, date, orefile)
+    itemid, itemhandle = create_item(id, title, abstract, creator, rights, date, orefile)
 
     # Retrieve aggreagated resources metadata
     aggregated_resources = ore["describes"]["aggregates"]
@@ -255,7 +258,7 @@ researchobjects_parsed.each do |researchobject|
       date = ar['Date']
 
 
-      bitstream = "/Users/njkhan2/Desktop/sead-test/#{title}"
+      bitstream = @config['seaddata']['directory'] + "#{new_directory}/#{title}"
       File.open(bitstream, "wb") do |saved_file|
         # the following "open" is provided by open-uri
         open(file_url, "rb", :http_basic_authentication=>[@config['seaddata']['email'], @config['seaddata']['password']]) do |read_file|
@@ -275,8 +278,7 @@ researchobjects_parsed.each do |researchobject|
     # Return Handle ID to SEAD
     message = @config['dspacedata']['host'] + "handle/#{itemhandle}"
     stage = "Success"
-    update_status(stage, message, updatestatus_url)
-
+    # update_status(stage, message, updatestatus_url)
 
 
   end
