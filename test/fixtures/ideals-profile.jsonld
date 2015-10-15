@@ -15,13 +15,31 @@
 	"keyword":"multidisciplinary",
 	"versioning": "no",
 	"databaseAccessType":"restricted",
-	"dataAccessType": [
-		"open",
-		"restricted"
+	"dataAccess": [
+	{
+    	"dataAccessType": "Level 0",
+    	"dataAccessRestriction": "Open access"
+    },
+	{
+	    "dataAccessType": "Level 1",
+	    "dataAccessRestriction": "Restricted to University of Illinois community members with a NetID and password only. Theses and dissertations with this restriction may be requested by outside users via interlibrary loan only; this is not true for other material restricted to the University of Illinois. This restriction may last indefinitely or may be for a limited amount of time."
+	},
+	{
+    	"dataAccessType": "Level 2",
+    	"dataAccessRestriction": "Restricted to a specific group defined and maintained within IDEALS. This restriction may last indefinitely or may be for a limited amount of time."
+    },
+    {
+    	"dataAccessType": "Level 3",
+    	"dataAccessRestriction": "Completely embargoed, i.e. closed access (i.e. accessible to no one via the web) for a specific period of time. These are not visible except to an IDEALS administrator or a community or collection administrator."
+    }
 	],
 	"dataLicense": {
 		"dataLicenseName":"IDEALS Copyright and Intellectual Property Policy",
 		"dataLicenseURL":"http://hdl.handle.net/2142/235"
+	},
+	"dataUploadLicense": {
+	    "dataUploadLicenseName": "IDEALS Deposit Agreement: Non-Exclusive Distribution and Preservation License",
+	    "dataUploadLicenseURL": "http://hdl.handle.net/2142/3732"
 	},
 	"contentType": [
 		"csv",

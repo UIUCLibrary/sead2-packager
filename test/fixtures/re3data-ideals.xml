@@ -48,16 +48,16 @@
       <r3d:databaseLicenseURL></r3d:databaseLicenseURL>
     </r3d:databaseLicense>
     <r3d:dataAccess>
-      <r3d:dataAccessType>open</r3d:dataAccessType>
-      <r3d:dataAccessRestriction></r3d:dataAccessRestriction>
+      <r3d:dataAccessType>Level 1</r3d:dataAccessType>
+      <r3d:dataAccessRestriction>Restricted to University of Illinois community members with a NetID and password only. Theses and dissertations with this restriction may be requested by outside users via interlibrary loan only; this is not true for other material restricted to the University of Illinois. This restriction may last indefinitely or may be for a limited amount of time.</r3d:dataAccessRestriction>
     </r3d:dataAccess>
     <r3d:dataAccess>
-      <r3d:dataAccessType>restricted</r3d:dataAccessType>
-      <r3d:dataAccessRestriction>Campus users only</r3d:dataAccessRestriction>
+      <r3d:dataAccessType>Level 2</r3d:dataAccessType>
+      <r3d:dataAccessRestriction>Restricted to a specific group defined and maintained within IDEALS. This restriction may last indefinitely or may be for a limited amount of time.</r3d:dataAccessRestriction>
     </r3d:dataAccess>
     <r3d:dataAccess>
-      <r3d:dataAccessType>restricted</r3d:dataAccessType>
-      <r3d:dataAccessRestriction>Administrator only</r3d:dataAccessRestriction>
+      <r3d:dataAccessType>Level 3</r3d:dataAccessType>
+      <r3d:dataAccessRestriction>Completely embargoed, i.e. closed access (i.e. accessible to no one via the web) for a specific period of time. These are not visible except to an IDEALS administrator or a community or collection administrator.</r3d:dataAccessRestriction>
     </r3d:dataAccess>
     <r3d:dataLicense>
       <r3d:dataLicenseName>IDEALS Copyright and Intellectual Property Policy</r3d:dataLicenseName>
@@ -68,8 +68,8 @@
       <r3d:dataUploadRestriction></r3d:dataUploadRestriction>
     </r3d:dataUpload>
     <r3d:dataUploadLicense>
-      <r3d:dataUploadLicenseName></r3d:dataUploadLicenseName>
-      <r3d:dataUploadLicenseURL></r3d:dataUploadLicenseURL>
+      <r3d:dataUploadLicenseName>IDEALS Deposit Agreement: Non-Exclusive Distribution and Preservation License</r3d:dataUploadLicenseName>
+      <r3d:dataUploadLicenseURL>http://hdl.handle.net/2142/3732</r3d:dataUploadLicenseURL>
     </r3d:dataUploadLicense>
     <r3d:software>
       <r3d:softwareName>DSpace</r3d:softwareName>
