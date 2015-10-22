@@ -40,26 +40,6 @@ def login_dspace
 end
 
 
-
-# Log in to SEAD
-def login_sead
-  @host_sead = @config['seaddata']['host']
-  seaduser = @config['seaddata']['email']
-  pwd = @config['seaddata']['password']
-
-  begin
-    response = RestClient.post("#{@host_sead}", {"email" => "#{seaduser}", "password" => "#{pwd}"}.to_json,
-                               {:content_type => 'application/json',
-                                :accept => 'application/json'})
-
-    @logger.info(response.code)
-
-  rescue => e
-    @logger.fatal("Cannot log into SEAD (#{e})")
-  end
-end
-
-
 # Creates item and posts ORE for the item
 def create_item (id, title, abstract, creator, rights, date, orefile)
 
@@ -97,15 +77,6 @@ def create_item (id, title, abstract, creator, rights, date, orefile)
                             } ,
                             {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
 
-  # Update bitstream metadata
-  # ore_metadata = JSON.parse(response)
-  # ore_id = "#{ore_metadata["id"]}"
-  # p ore_id
-  #
-  # update_aggmetadata = RestClient.put("#{@host}/rest/bitstreams/#{ore_id}", [{"format" => "JSON-LD"}, {"mimeType"=>"application/ld+json"}].to_json,
-  #                                     {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-  # p update_aggmetadata.to_str
-  # @logger.info "Response status: #{update_aggmetadata.code}"
 
   @logger.info "Response status: #{response.code}"
 
@@ -147,7 +118,6 @@ end
 # Main
 
 login_dspace
-login_sead
 
 # Get the list of all research objects for ideals
 researchobjects = RestClient.get @config['seaddata']['ro_list']
@@ -179,7 +149,7 @@ researchobjects_parsed.each do |researchobject|
     updatestatus_url = @config['seaddata']['ro_ore'] + "#{agg_id_escaped}/status"
     message = "Processing research object"
     stage = "Pending"
-    # update_status(stage, message, updatestatus_url)
+    update_status(stage, message, updatestatus_url)
 
     ro_json = RestClient.get ro_url
     # p ro_json
@@ -202,7 +172,7 @@ researchobjects_parsed.each do |researchobject|
         p "ERROR: Invalid URL #{ore_url} -- #{ore_url.code}"
         message = "Invalid URL #{ore_url} -- #{ore_url.code}"
         stage = "Failure"
-        # update_status(stage, message, updatestatus_url)
+        update_status(stage, message, updatestatus_url)
         next
       end
 
@@ -210,7 +180,7 @@ researchobjects_parsed.each do |researchobject|
       p "ERROR: Cannot reach #{ore_url} (#{e})"
       message = "Cannot reach #{ore_url} (#{e})"
       stage = "Failure"
-      # update_status(stage, message, updatestatus_url)
+      update_status(stage, message, updatestatus_url)
       next
     end
 
@@ -242,17 +212,17 @@ researchobjects_parsed.each do |researchobject|
       p "ERROR: Cannot download file to temp location -- (#{e})"
       message = "Cannot download file to temp location -- (#{e})"
       stage = "Failure"
-      # update_status(stage, message, updatestatus_url)
+      update_status(stage, message, updatestatus_url)
     end
 
     itemid, itemhandle = create_item(id, title, abstract, creator, rights, date, orefile)
 
     # Retrieve aggreagated resources metadata
     aggregated_resources = ore["describes"]["aggregates"]
-    # p aggregated_resources.class
 
     aggregated_resources.each do |ar|
-      file_url = ar['similarTo']
+      # file_url = ar['similarTo']
+      file_url = ar['@id']
       title = ar['Title']
       mime = ar['Mimetype']
       date = ar['Date']
@@ -278,9 +248,8 @@ researchobjects_parsed.each do |researchobject|
     # Return Handle ID to SEAD
     message = @config['dspacedata']['host'] + "handle/#{itemhandle}"
     stage = "Success"
-    # update_status(stage, message, updatestatus_url)
-
-
+    update_status(stage, message, updatestatus_url)
+    
   end
 
 end
