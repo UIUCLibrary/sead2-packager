@@ -222,7 +222,7 @@ researchobjects_parsed.each do |researchobject|
 
     aggregated_resources.each do |ar|
       # file_url = ar['similarTo']
-      file_url = ar['@id']
+      file_url = ar['similarTo']
       title = ar['Title']
       mime = ar['Mimetype']
       date = ar['Date']
@@ -249,7 +249,7 @@ researchobjects_parsed.each do |researchobject|
     message = @config['dspacedata']['host'] + "handle/#{itemhandle}"
     stage = "Success"
     update_status(stage, message, updatestatus_url)
-    
+
   end
 
 end
