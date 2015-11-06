@@ -1,0 +1,254 @@
+{
+	"@context": "http://re3data.org/",
+	"@type": "repository",
+	"orgidentifier": "ideals",
+	"repositoryName": "IDEALS",
+	"repositoryURL": "https://www.ideals.illinois.edu/",
+	"institution": "University of Illinois",
+	"description":{
+		"langauge": "eng",
+		"content":"IDEALS is the digital repository for research and scholarship - including published and unpublished papers, datasets, video and audio - produced at the University of Illinois."
+	},
+	"repositoryContact":"ideals-gen@illinois.edu",
+	"repositoryType": "institutional",
+	"subject": "any",
+	"keyword":"multidisciplinary",
+	"versioning": "no",
+	"databaseAccessType":"restricted",
+	"dataAccess": [
+	{
+    	"dataAccessType": "Level 0",
+    	"dataAccessRestriction": "Open access"
+    },
+	{
+	    "dataAccessType": "Level 1",
+	    "dataAccessRestriction": "Restricted to University of Illinois community members with a NetID and password only. Theses and dissertations with this restriction may be requested by outside users via interlibrary loan only; this is not true for other material restricted to the University of Illinois. This restriction may last indefinitely or may be for a limited amount of time."
+	},
+	{
+    	"dataAccessType": "Level 2",
+    	"dataAccessRestriction": "Restricted to a specific group defined and maintained within IDEALS. This restriction may last indefinitely or may be for a limited amount of time."
+    },
+    {
+    	"dataAccessType": "Level 3",
+    	"dataAccessRestriction": "Completely embargoed, i.e. closed access (i.e. accessible to no one via the web) for a specific period of time. These are not visible except to an IDEALS administrator or a community or collection administrator."
+    }
+	],
+	
+	"dataLicense": {
+		"dataLicenseName":"IDEALS Copyright and Intellectual Property Policy",
+		"dataLicenseURL":"http://hdl.handle.net/2142/235"
+	},
+	"dataDepositAgreement": {
+	    "dataDepositAgreementName": "<!DOCTYPE html><html>
+<p>To properly administer the Illinois Digital Environment for Access to Learning and Scholarship
+(IDEALS) and preserve the contents for future use, the Board of Trustees of the University of Illinois on
+behalf of its Urbana-Champaign campus (the \"University\") requires certain permissions and warrants
+from you, the author(s) and/or copyright owner. If you are the copyright owner, by accepting this license,
+you still retain copyright to your work and do not give up the right to submit the work to publishers or
+other repositories. If you are not the copyright owner, you represent that the copyright owner has given
+you permission to deposit the work.<\/p>
+<p>By accepting (clicking through) this license, you grant to the University the non-exclusive right to
+reproduce, translate (as described below), and distribute the submission, including the descriptive
+information (metadata) and abstract, in any format or medium worldwide and royalty-free, including, but
+not limited to, publication over the Internet, except as provided for by an addendum to this agreement.
+When provided, the University will clearly identify your name(s) as the author(s) or copyright owner(s) of
+the submission as well as the name(s) of the copyright owner(s) if different from your name(s), include a
+statement of your copyright, and will not make any alteration, other than as allowed by this license, to
+your submission.<\/p>
+<p>You agree that the University may translate the submission to any medium or format for the purposes of
+security, back-up, and preservation. You agree that the University may make multiple copies of the
+submission for the purposes of security, back-up, and preservation.
+If you cannot make all of the following representations, then you shall contact the IDEALS Staff at
+ideals-gen@illinois.edu before proceeding further. In order to make this submission, you represent that:<\/p>
+<p>
+<ol>
+<li>You have the right to grant the rights contained in the license.<\/li>
+<li>This submission does not, to the best of your knowledge, infringe on anyone's copyright or other
+intellectual property rights.<\/li>
+<li>If the submission does contain material for which you do not hold copyright and that exceeds fair
+use, you have obtained the unrestricted permission of the copyright owner to grant the University
+the rights required by this license and that such third-party owned material is clearly identified
+and acknowledged within the text or content of the submission.<\/li>
+<li>The submission does not contain any confidential information, proprietary information of others
+or export controlled information.<\/li>
+<li>There are not any restrictions or required publication delays on the distribution of the submission
+by the University.<\/li>
+<li>The information you provide about the submission is accurate.<\/li>
+<\/ol>
+<\/p>
+<p>You understand that if copyright terms for, or ownership of, the submission change, it is your
+responsibility to notify the University of these changes.
+You understand that you may request that the submission be withdrawn from IDEALS, and, in
+such an event, the descriptive information (metadata) will be retained and a copy of the submission 
+will be retained in a 'dark archive' where it is no longer publicly accessible. The exception to this is
+requests to withdraw theses and dissertations electronically deposited with the Graduate College; in
+those cases, you understand that you must contact the Graduate College at thesis@illinois.edu to
+make such a request.<\/p>
+<p>If the submission is based upon work that has been sponsored or supported by an agency or organization
+other than the University, you must fulfill any right of review or other obligations required by the contract
+or agreement with such an agency or organization before depositing into IDEALS.
+By accepting this license, you acknowledge that you have read and agreed to the terms of this agreement
+and all related IDEALS and University policies.<\/p>
+<\/html>",
+	    "dataDepositAgreementURL": "http://hdl.handle.net/2142/3732"
+	},
+	"contentType": [
+		"application/pdf",
+		"application/rdf+xml; charset=utf-8",
+		"text/xml",
+		"text/plain",
+		"text/html",
+		"text/css",
+		"application/msword",
+		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		"application/vnd.ms-powerpoint",
+		"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+		"application/vnd.ms-excel",
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		"application/marc",
+		"image/jpeg",
+		"image/gif",
+		"image/png",
+		"image/tiff",
+		"audio/x-aiff",
+		"audio/basic",
+		"audio/x-wav",
+		"video/mpeg",
+		"text/richtext",
+		"application/vnd.visio",
+		"application/x-filemaker",
+		"image/x-ms-bmp",
+		"application/x-photoshop",
+		"application/postscript",
+		"video/quicktime",
+		"audio/x-mpeg",
+		"application/vnd.ms-project",
+		"application/mathematica",
+		"application/x-latex",
+		"application/x-tex",
+		"application/x-dvi",
+		"application/sgml",
+		"application/wordperfect5.1",
+		"audio/x-pn-realaudio",
+		"image/x-photo-cd",
+		"application/vnd.oasis.opendocument.text",
+		"application/vnd.oasis.opendocument.text-template",
+		"application/vnd.oasis.opendocument.text-web",
+		"application/vnd.oasis.opendocument.text-master",
+		"application/vnd.oasis.opendocument.graphics",
+		"application/vnd.oasis.opendocument.graphics-template",
+		"application/vnd.oasis.opendocument.presentation",
+		"application/vnd.oasis.opendocument.presentation-template",
+		"application/vnd.oasis.opendocument.spreadsheet",
+		"application/vnd.oasis.opendocument.spreadsheet-template",
+		"application/vnd.oasis.opendocument.chart",
+		"application/vnd.oasis.opendocument.formula",
+		"application/vnd.oasis.opendocument.database",
+		"application/vnd.oasis.opendocument.image",
+		"application/vnd.openofficeorg.extension",
+		"application/vnd.sun.xml.writer",
+		"application/vnd.sun.xml.writer.template",
+		"application/vnd.sun.xml.calc",
+		"application/vnd.sun.xml.calc.template",
+		"application/vnd.sun.xml.draw",
+		"application/vnd.sun.xml.draw.template",
+		"application/vnd.sun.xml.impress",
+		"application/vnd.sun.xml.impress.template",
+		"application/vnd.sun.xml.writer.global",
+		"application/vnd.sun.xml.math",
+		"application/vnd.stardivision.writer",
+		"application/vnd.stardivision.writer-global",
+		"application/vnd.stardivision.calc",
+		"application/vnd.stardivision.draw",
+		"application/vnd.stardivision.impress",
+		"application/vnd.stardivision.impress-packed",
+		"application/vnd.stardivision.math",
+		"application/vnd.stardivision.chart",
+		"application/vnd.stardivision.mail"
+	],
+	"metadataStandardDCCNames":"Dublin Core",
+	"metadataStandardDCCURLs":"http://www.dcc.ac.uk/resources/metadata-standards/dublin-core",
+	"metadataFields":
+	[
+		"dc.contributor",
+		"dc.contributor.advisor",
+		"dc.contributor.author",
+		"dc.contributor.editor",
+		"dc.contributor.illustrator",
+		"dc.contributor.other",
+		"dc.coverage.spatial",
+		"dc.coverage.temporal",
+		"dc.creator",
+		"dc.date.accessioned",
+		"dc.date.available",
+		"dc.date.copyright",
+		"dc.date.created",
+		"dc.date.issued",
+		"dc.date.submitted",
+		"dc.date.updated",
+		"dc.date",
+		"dc.description.abstract",
+		"dc.description.provenance",
+		"dc.description.sponsorship",
+		"dc.description.statementofresponsibility",
+		"dc.description.tableofcontents",
+		"dc.description.uri",
+		"dc.description.version",
+		"dc.description",
+		"dc.format.extent",
+		"dc.format.medium",
+		"dc.format.mimetype",
+		"dc.format",
+		"dc.identifier.citation",
+		"dc.identifier.doi",
+		"dc.identifier.govdoc",
+		"dc.identifier.isbn",
+		"dc.identifier.ismn",
+		"dc.identifier.issn",
+		"dc.identifier.other",
+		"dc.identifier.sici",
+		"dc.identifier.slug",
+		"dc.identifier.uri",
+		"dc.identifier",
+		"dc.language.iso",
+		"dc.language.rfc3066",
+		"dc.language",
+		"dc.provenance",
+		"dc.publisher",
+		"dc.relation.haspart",
+		"dc.relation.hasversion",
+		"dc.relation.isbasedon",
+		"dc.relation.isformatof",
+		"dc.relation.ispartof",
+		"dc.relation.ispartofseries",
+		"dc.relation.isreferencedby",
+		"dc.relation.isreplacedby",
+		"dc.relation.isversionof",
+		"dc.relation.replaces",
+		"dc.relation.requires",
+		"dc.relation.uri",
+		"dc.relation",
+		"dc.rights.holder",
+		"dc.rights.license",
+		"dc.rights.uri",
+		"dc.rights",
+		"dc.source.uri",
+		"dc.source",
+		"dc.subject.classification",
+		"dc.subject.ddc",
+		"dc.subject.lcc",
+		"dc.subject.lcsh",
+		"dc.subject.mesh",
+		"dc.subject.other",
+		"dc.subject",
+		"dc.title.alternative",
+		"dc.title",
+		"dc.type"
+	],
+	"providerType":"serviceProvider",
+	"size":"640GB",
+	"maxFileSize": {
+		"unit": "MB",
+		"value": 2000
+	}
+}
