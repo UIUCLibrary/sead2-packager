@@ -4,40 +4,61 @@
 	"orgidentifier": "ideals",
 	"repositoryName": "IDEALS",
 	"repositoryURL": "https://www.ideals.illinois.edu/",
-	"institution": "University of Illinois",
+	"institution": "University of Illinois at Urbana-Champaign, University Library",
+	"institutionType": "non-profit",
+	"institutionURL": "http://www.library.illinois.edu/",
+	"institutionContact": "provost@illinois.edu",
 	"description":{
 		"langauge": "eng",
 		"content":"IDEALS is the digital repository for research and scholarship - including published and unpublished papers, datasets, video and audio - produced at the University of Illinois."
 	},
 	"repositoryContact":"ideals-gen@illinois.edu",
 	"repositoryType": "institutional",
+	"missionStatementURL": "https://wiki.cites.illinois.edu/wiki/display/IDEALS/IDEALS+Resources+and+Information",
 	"subject": "any",
 	"keyword":"multidisciplinary",
 	"versioning": "no",
-	"databaseAccessType":"restricted",
+	"databaseAccess":{
+		"databaseAccessType": "restricted",
+		"databaseAccessRestriction": "registration"
+	},
 	"dataAccess": [
 	{
-    	"dataAccessType": "Level 0",
-    	"dataAccessRestriction": "Open access"
+    	"dataAccessType": "Open access"
     },
 	{
-	    "dataAccessType": "Level 1",
-	    "dataAccessRestriction": "Restricted to University of Illinois community members with a NetID and password only. Theses and dissertations with this restriction may be requested by outside users via interlibrary loan only; this is not true for other material restricted to the University of Illinois. This restriction may last indefinitely or may be for a limited amount of time."
+	    "dataAccessType": "Restricted",
+	    "dataAccessRestriction": "Institutional membership"
 	},
 	{
-    	"dataAccessType": "Level 2",
-    	"dataAccessRestriction": "Restricted to a specific group defined and maintained within IDEALS. This restriction may last indefinitely or may be for a limited amount of time."
+    	"dataAccessType": "Restricted",
+    	"dataAccessRestriction": "Registration"
     },
     {
-    	"dataAccessType": "Level 3",
-    	"dataAccessRestriction": "Completely embargoed, i.e. closed access (i.e. accessible to no one via the web) for a specific period of time. These are not visible except to an IDEALS administrator or a community or collection administrator."
-    }
+    	"dataAccessType": "Embargoed"
+	}
 	],
 	
-	"dataLicense": {
+	"dataLicense": [
+	{
 		"dataLicenseName":"IDEALS Copyright and Intellectual Property Policy",
 		"dataLicenseURL":"http://hdl.handle.net/2142/235"
 	},
+	{
+		"dataLicenseName": "CC",
+		"dataLicenseURL": "https://creativecommons.org/licenses/"
+	}
+    ],
+	"dataUpload": [
+	{
+	    "dataUploadType": "restricted",
+	    "dataUploadRestriction": "institutional membership"
+	},
+	{
+	    "dataUploadType": "restricted",
+	    "dataUploadRestriction": "registration"
+	}
+	],
 	"dataDepositAgreement": {
 	    "dataDepositAgreementName": "<!DOCTYPE html><html>
 <p>To properly administer the Illinois Digital Environment for Access to Learning and Scholarship
@@ -92,7 +113,25 @@ and all related IDEALS and University policies.<\/p>
 <\/html>",
 	    "dataDepositAgreementURL": "http://hdl.handle.net/2142/3732"
 	},
+	
 	"contentType": [
+		"Standard office documents",
+		"Networkbased data",
+		"Databases",
+		"Images",
+		"Structured graphics",
+		"Audiovisual data",
+		"Scientific and statistical data formats",
+		"Raw data",
+		"Plain text",
+		"Structured text",
+		"Archived data",
+		"Software applications",
+		"Source code",
+		"Configuration data",
+		"Others"
+	],
+	"dataFormat": [
 		"application/pdf",
 		"application/rdf+xml; charset=utf-8",
 		"text/xml",
@@ -166,8 +205,8 @@ and all related IDEALS and University policies.<\/p>
 		"application/vnd.stardivision.chart",
 		"application/vnd.stardivision.mail"
 	],
-	"metadataStandardDCCNames":"Dublin Core",
-	"metadataStandardDCCURLs":"http://www.dcc.ac.uk/resources/metadata-standards/dublin-core",
+	"metadataStandardName":"Dublin Core",
+	"metadataStandardURL":"http://www.dcc.ac.uk/resources/metadata-standards/dublin-core",
 	"metadataFields":
 	[
 		"dc.contributor",
@@ -245,7 +284,20 @@ and all related IDEALS and University policies.<\/p>
 		"dc.title",
 		"dc.type"
 	],
+	"api": [
+	{
+		"URL": "https://seadtest.ideals.illinois.edu/rest",
+		"apiType": "REST"
+	},
+	{
+		"URI": "http://www.ideals.illinois.edu/dspace-oai/request?verb=Identify",
+		"apiType": "OAI-PMH"
+	}
+    ],
+	"pidSystem": "Handle",
 	"providerType":"serviceProvider",
+	"entryDate": "2015-11-12",
+	"lastUpdate": "2015-11-12",
 	"size":"640GB",
 	"maxFileSize": {
 		"unit": "MB",
