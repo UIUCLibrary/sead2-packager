@@ -14,7 +14,7 @@ require 'fileutils'
 @config = YAML.load_file('data.yaml')
 
 @logger = Logger.new(STDOUT)
-@logger.level = Logger::INFO
+@logger.level = Logger::ERROR
 @logger.formatter = proc do |severity, datetime, progname, msg|
   "#{severity}: #{msg}\n"
 end
