@@ -5,8 +5,8 @@ require 'json'
 require 'rest-client'
 require 'cgi'
 require 'open-uri'
-require 'rdf'
-require 'linkeddata'
+# require 'rdf'
+# require 'linkeddata'
 require 'logger'
 require 'yaml'
 require 'fileutils'
@@ -131,7 +131,7 @@ researchobjects_parsed.each do |researchobject|
 
   old_item = false
   researchobject['Status'].each do |status|
-    old_item = true unless status['stage'] == "Receipt Acknowledged" && status['reporter'] == "SEAD-CP"
+    old_item = true unless status['stage'] == "Receipt Acknowledged" && status['reporter'] == "SEAD-C3PR"
   end
 
 
