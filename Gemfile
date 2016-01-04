@@ -1,4 +1,6 @@
-source 'https://rubygems.org'
+# A sample Gemfile
+source "https://rubygems.org"
 
-# Specify your gem's dependencies in sead2-packager.gemspec
-gemspec
+# gem "rails"
+gem 'json'
+gem 'rest-client'
