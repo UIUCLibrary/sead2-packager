@@ -102,7 +102,7 @@ def update_item(itemid, bitstream, title, mime, date)
                             } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
 
   unless "#{response.code}" == "200"
-    @logger.fatal "ORE ingestion failed! (#{response})"
+    @logger.fatal "Bitstream upload failed! (#{response})"
   end
 end
 
