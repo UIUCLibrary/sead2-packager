@@ -11,7 +11,7 @@ require 'logger'
 require 'yaml'
 require 'fileutils'
 
-@config = YAML.load_file('data.yaml')
+@config = YAML.load_file('config/config.yaml')
 
 @logger = Logger.new(STDOUT)
 @logger.level = Logger::ERROR
@@ -202,9 +202,9 @@ researchobjects_parsed.each do |researchobject|
     p "date: #{date}"
 
     begin
-      new_directory = "#{title}"
-      Dir.mkdir(@config['seaddata']['directory']+new_directory) unless File.exist?(@config['seaddata']['directory']+new_directory)
-      orefile = @config['seaddata']['directory'] + "#{new_directory}/#{title}.jsonld"
+      item_dir = "#{title}"
+      Dir.mkdir(@config['seaddata']['main_dir']+item_dir) unless File.exist?(@config['seaddata']['main_dir']+item_dir)
+      orefile = @config['seaddata']['main_dir'] + "#{item_dir}/#{title}.jsonld"
       File.open(orefile, "wb") do |f|
         f.write(ore_json)
       end
@@ -228,19 +228,21 @@ researchobjects_parsed.each do |researchobject|
       date = ar['Date']
 
 
-      bitstream = @config['seaddata']['directory'] + "#{new_directory}/#{title}"
+      bitstream = @config['seaddata']['main_dir'] + "#{item_dir}/#{title}"
       File.open(bitstream, "wb") do |saved_file|
         # the following "open" is provided by open-uri
         open(file_url, "rb", :http_basic_authentication=>[@config['seaddata']['email'], @config['seaddata']['password']]) do |read_file|
           saved_file.write(read_file.read)
         end
       end
+      puts File.size?(bitstream)
 
-      File.open(orefile, "wb") do |f|
-        f.write(ore_json)
+      until File.file?(bitstream)
+        sleep 1
       end
 
       update_item itemid, bitstream, title, mime, date
+
 
     end
 
