@@ -66,17 +66,8 @@ def create_item (id, title, abstract, creator, rights, date, orefile)
 
 
   # post orefile
-  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}.jsonld&description=ORE_file",
-                            {
-                                :transfer =>{
-                                    :type => 'bitstream'
-                                },
-                                :upload => {
-                                    :file => File.new("#{orefile}",'rb')
-                                }
-                            } ,
-                            {:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
-
+  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}.jsonld&description=ORE_file", File.new("#{orefile}",'rb'),
+                             {:rest_dspace_token=> "#{@login_token}", :content_type=> 'application/json'})
 
   @logger.info "Response status: #{response.code}"
 
@@ -89,17 +80,11 @@ def create_item (id, title, abstract, creator, rights, date, orefile)
   return itemid, itemhandle
 end
 
+
 def update_item(itemid, bitstream, title, mime, date)
   # code here
-  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}",
-                            {
-                                :transfer =>{
-                                    :type => 'bitstream'
-                                },
-                                :upload => {
-                                    :file => File.new("#{bitstream}",'rb')
-                                }
-                            } ,{:content_type => 'application/json', :accept => 'application/json', :rest_dspace_token => "#{@login_token}" })
+  response = RestClient.post("#{@host}/rest/items/#{itemid}/bitstreams?name=#{title.gsub(' ', '_')}", File.new("#{bitstream}",'rb'),
+                             {:rest_dspace_token=> "#{@login_token}", :content_type=> 'application/json'})
 
   unless "#{response.code}" == "200"
     @logger.fatal "Bitstream upload failed! (#{response})"
@@ -234,11 +219,6 @@ researchobjects_parsed.each do |researchobject|
         open(file_url, "rb", :http_basic_authentication=>[@config['seaddata']['email'], @config['seaddata']['password']]) do |read_file|
           saved_file.write(read_file.read)
         end
-      end
-      puts File.size?(bitstream)
-
-      until File.file?(bitstream)
-        sleep 1
       end
 
       update_item itemid, bitstream, title, mime, date
