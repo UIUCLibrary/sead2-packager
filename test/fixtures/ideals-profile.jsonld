@@ -13,7 +13,10 @@
 		"content":"IDEALS is the digital repository for research and scholarship - including published and unpublished papers, datasets, video and audio - produced at the University of Illinois."
 	},
 	"repositoryContact":"ideals-gen@illinois.edu",
-	"repositoryType": "institutional",
+	"repositoryType": [
+		"institutional",
+		"disciplinary"
+	],
 	"missionStatementURL": "https://wiki.cites.illinois.edu/wiki/display/IDEALS/IDEALS+Resources+and+Information",
 	"subject": "any",
 	"keyword":"multidisciplinary",
@@ -131,7 +134,7 @@ and all related IDEALS and University policies.<\/p>
 		"Configuration data",
 		"Others"
 	],
-	"dataFormat": [
+	"Data Mimetypes": [
 		"application/pdf",
 		"application/rdf+xml; charset=utf-8",
 		"text/xml",
@@ -294,6 +297,14 @@ and all related IDEALS and University policies.<\/p>
 		"apiType": "OAI-PMH"
 	}
     ],
+	"Metadata Terms": [
+		"http://purl.org/dc/terms/creator",
+		"http://purl.org/dc/terms/abstract"
+	],
+	"Max Dataset Size": "10000000000",
+	"Total Size": "2000000000",
+	"Max Collection Depth": "1",
+	"Rights Holder IDs Required": "true",
 	"pidSystem": "Handle",
 	"providerType":"serviceProvider",
 	"entryDate": "2015-11-12",
