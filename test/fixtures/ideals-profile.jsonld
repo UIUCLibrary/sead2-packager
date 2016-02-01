@@ -1,5 +1,16 @@
 {
-	"@context": "http://re3data.org/",
+	"@context": [
+		"http://re3data.org/",
+		{
+			"Max Dataset Size": "http://sead-data.net/terms/maxdatasetsize",
+			"Rights Holder IDs Required": "http://sead-data.net/terms/RightsHolderIdsRequired",
+			"Total Size": "tag:tupeloproject.org,2006:/2.0/files/length",
+			"Max Collection Depth": "http://sead-data.net/terms/maxcollectiondepth",
+			"Affiliations": "http://sead-data.net/terms/affiliations",
+			"Data Mimetypes": "http://purl.org/dc/elements/1.1/format",
+			"Metadata Terms": "http://sead-data.net/terms/terms"
+		}
+	],
 	"@type": "repository",
 	"orgidentifier": "ideals",
 	"repositoryName": "IDEALS",
@@ -301,17 +312,13 @@ and all related IDEALS and University policies.<\/p>
 		"http://purl.org/dc/terms/creator",
 		"http://purl.org/dc/terms/abstract"
 	],
-	"Max Dataset Size": "10000000000",
-	"Total Size": "2000000000",
+	"Max Dataset Size": "2000000000",
+	"Total Size": "10000000000",
 	"Max Collection Depth": "1",
-	"Rights Holder IDs Required": "true",
+	"Rights Holder IDs Required": true,
 	"pidSystem": "Handle",
 	"providerType":"serviceProvider",
 	"entryDate": "2015-11-12",
-	"lastUpdate": "2015-11-12",
-	"size":"640GB",
-	"maxFileSize": {
-		"unit": "MB",
-		"value": 2000
-	}
+	"lastUpdate": "2016-02-01",
+	"size":"640GB"
 }
